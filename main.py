@@ -1,0 +1,3 @@
+import pyparted
+
+print("OK")
