@@ -1,3 +1,3 @@
-import pyparted
+import parted
 
 print("OK")
