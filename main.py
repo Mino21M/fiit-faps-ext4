@@ -8,6 +8,7 @@ from hashlib import md5
 BOOTSECTORSIZE = 1024
 SUPERBLOCKSIZE = 1024
 GROUPDESCSIZE = 64
+DEFINODESIZE = 128
 
 def errors(val, msg):
     print(msg)
@@ -48,8 +49,39 @@ def parse_superblock(byte):
 #group descriptor - get from superblock, 0x8 lower and 0x28 upper bits
 def parse_group_descriptor(byte):
     inode_table = int.from_bytes(byte[0x8:0xb] + byte[0x28:0x2b], byteorder=byteorder)
+    free_inodes_count = int.from_bytes(byte[0xE:0x10] + byte[0x2E:0x30], byteorder=byteorder)
+
+    return inode_table, free_inodes_count
+
+def parse_inode_table(disk, occupied, offset, start, block_size):
+    deleted = 0
+    disk.seek(start)
+    disk.read(offset)
+
+    for i in range(14 + 1):
+        byte = disk.read(DEFINODESIZE)
+        mode = int.from_bytes(byte[0x0:0x2], byteorder=byteorder)
+        size = int.from_bytes(byte[0x4:0x8] + byte[0x80:0x82], byteorder=byteorder)
+        hard_links = int.from_bytes(byte[0x1A:0x1B], byteorder=byteorder)
+        deleted_time = int.from_bytes(byte[0x14:0x18], byteorder=byteorder)
+        block_count = int.from_bytes(byte[0x1c:0x20] + byte[0x98:0x9c], byteorder=byteorder)
+        block_addressing = byte[0x28:0x64]
+        old_address = disk.tell()
+
+        with open("recover/" + str(i + 1) + ".bin", "wb") as recover:
+            for j in range(15):
+                first_block = int.from_bytes(block_addressing[j*4:(j+1)*4], byteorder=byteorder)
+                disk.seek(first_block*block_size)
+                data = disk.read(block_size)
+                if len(data) > 0 and data[0] > 0:
+                    recover.write(data)
+                    print(data)
+
+        print(i + 1, "deleted", deleted, "mode", mode, "hard_links", hard_links, "size", size, "deleted time", deleted_time, "block count", block_count)
+        print("------------")
+        disk.seek(old_address)
     
-    return inode_table
+    return deleted
 
 #make this multithreaded with cpu_count()
 def undelete_files(inodes, destination):
@@ -107,20 +139,22 @@ except ValueError:
     errors(2, "Invalid number: not number")
 
 with open(recover['device'].path, 'rb') as disk:
-    disk.seek(recover['partition'].geometry.start*recover['device'].sectorSize + BOOTSECTORSIZE)
+    START=recover['partition'].geometry.start*recover['device'].sectorSize
+    disk.seek(START + BOOTSECTORSIZE)
     ending = recover['partition'].geometry.end*recover['device'].sectorSize
 
     #Superblock - veriify if 64 bit is enabled 0xFE - if not then abort, block size 0x18 32bits
     magic_number, block_size, desc_size, total_inode, free_inode, inodes_per_group = parse_superblock(disk.read(SUPERBLOCKSIZE))
 
     #Skip due to different block size and superblock size and bootsector size
-    disk.read(block_size-SUPERBLOCKSIZE-BOOTSECTORSIZE)
+    disk.read(block_size - SUPERBLOCKSIZE - BOOTSECTORSIZE)
 
     #group descriptor - get from superblock, 0x8 lower and 0x28 upper bits
-    inode_table = parse_group_descriptor(disk.read(block_size))
+    inode_table, free_inodes_count = parse_group_descriptor(disk.read(block_size))
 
     #inode table - 0x14 deletion time, 0x1a hard links count, 0x0=0x8000 regular file, check for huge_file flag 0x20=0x40000 if yes then cant recover,
     #0x4 Lower + 0x6c upper file / dir size, 0x80 size of inode
-    
+    parse_inode_table(disk, inodes_per_group - free_inodes_count, inode_table*block_size, START, block_size)
 
+    print(START, magic_number, block_size, desc_size, total_inode, free_inode, inodes_per_group, inode_table, free_inodes_count)
     #print(chunk)
