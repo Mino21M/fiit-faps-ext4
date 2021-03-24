@@ -6,7 +6,6 @@ class inodetable():
     def __init__(self, chunk, occupied):
         self.inodes = []
         self.occupied = occupied
-        print(occupied)
         self.parse(chunk)
 
     def parse(self, chunk):

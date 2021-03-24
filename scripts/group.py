@@ -18,7 +18,8 @@ class group():
             self.disk_file.seek(self.superblock.block_size * self.groupdescriptor.inode_table)
             self.inodetable = inodetable(self.disk_file.read(self.superblock.block_size), self.superblock.inodes_per_group - self.groupdescriptor.free_inodes_count)
             
-            self.journal = None
+            journal_file = self.inodetable.inodes[6].getData(self.disk_file, self.superblock.block_size)
+            self.journal = journal(journal_file, self.superblock.block_size)
 
     def print(self):
         self.superblock.print()
@@ -26,3 +27,4 @@ class group():
         if self.superblock.valid:
             self.groupdescriptor.print()
             self.inodetable.print()
+            self.journal.print()
