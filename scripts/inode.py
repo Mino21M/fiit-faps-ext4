@@ -1,4 +1,4 @@
-from .constants import INODEPOINTER
+from .constants import EXTENTTREEMAGICNUMBER
 from sys import byteorder
 
 class inode():
@@ -12,7 +12,7 @@ class inode():
         self.mode = int.from_bytes(chunk[0x0:0x2], byteorder=byteorder)
         self.size = int.from_bytes(chunk[0x4:0x8], byteorder=byteorder)
         self.deleted_time = int.from_bytes(chunk[0x14:0x18], byteorder=byteorder)
-        self.hard_links = int.from_bytes(chunk[0x1A:0x1B], byteorder=byteorder)
+        self.hard_links = int.from_bytes(chunk[0x1A:0x1C], byteorder=byteorder)
         self.block_count = int.from_bytes(chunk[0x1C:0x20], byteorder=byteorder)
         self.block_addressing = chunk[0x28:0x64]
 
@@ -72,7 +72,7 @@ class inode():
         self.magic_number = int.from_bytes(chunk[0x0:0x2], byteorder=byteorder)
         self.blocks = []
 
-        if self.magic_number == 0xF30A:
+        if self.magic_number == EXTENTTREEMAGICNUMBER:
             self.blocks.append(self.getBlocksExtentTree(chunk))
         """
         else:
@@ -87,3 +87,15 @@ class inode():
                         blocks.append(self.parse_inode_type(block_size//INODEPOINTER, disk.read(block_size), length, block_size, disk, depth-1))
             #data = parse_blocks(disk, blocks, block_size)
         """
+
+    def valid(self):
+        if len(self.blocks) > 0:
+            if self.mode > 0 and self.mode < 65535:
+                return True
+            if self.magic_number > 0 and self.magic_number < 65535:
+                return True
+            if self.size > 0 and self.size < 4294967295:
+                return True
+            if self.block_count > 0 and self.block_count < 4294967295:
+                return True
+        return False

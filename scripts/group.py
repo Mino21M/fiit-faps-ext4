@@ -21,7 +21,7 @@ class group():
             journal_inode = self.inodetable.inodes[self.superblock.journal_inode - 1]
             journal_inode.print()
             journal_file = journal_inode.getData(self.disk_file, self.superblock.block_size)
-            self.journal = journal(journal_file,  self.superblock.block_size, disk_file)
+            self.journal = journal(journal_file,  self.superblock.block_size, disk_file, self.superblock.inode_size)
 
     def print(self):
         self.superblock.print()
