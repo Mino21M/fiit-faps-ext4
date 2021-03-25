@@ -1,4 +1,5 @@
 from .constants import EXTENTTREEMAGICNUMBER
+from datetime import datetime
 from sys import byteorder
 
 class inode():
@@ -99,3 +100,11 @@ class inode():
             if self.block_count > 0 and self.block_count < 4294967295:
                 return True
         return False
+
+    def name(self):
+        #size + "B/kB/MB..." + "_" + deletion_date(%Y%M%D_%H%M%S)
+        size = str(self.size)
+        date = datetime.fromtimestamp(self.deleted_time)
+        date = date.strftime("%Y%d%m-%H%M%S")
+
+        return size + "B_" + date + ".bin"

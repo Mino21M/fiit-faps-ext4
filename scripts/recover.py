@@ -1,8 +1,7 @@
 from scripts.device import device
 from scripts.group import group
 
-#GROUPPOSITIONS =  [0, 32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 4096000]
-GROUPPOSITIONS = [0]
+GROUPPOSITIONS =  [0, 32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 4096000]
 
 class recover():
 
@@ -12,36 +11,11 @@ class recover():
         
         if self.device.valid:
             self.parse()
-            #self.recovery()
-
-        self.print()
 
     def parse(self):
         for group_number in GROUPPOSITIONS:
             gr = group(group_number, self.device.disk_file, 1024)
             self.groups.append(gr)
-
-    def recovery(self):
-        first_valid_group = None
-        #Find first valid group to start recovery
-        for group in self.groups:
-            if group.superblock.valid:
-                first_valid_group = group
-                break
-        
-        #Find iNodes that are on the same spot in inode table
-        for num, inode in enumerate(first_valid_group.inodetable.inodes):
-            if inode.deleted_time == 0 and inode.hard_links > 0:
-                continue
-            else:
-                for group in self.groups:
-                    if not group.superblock.valid:
-                        continue
-                    if group.inodetable.inodes[num].ind == inode.ind:
-                        pass
-                        #print("INODES!!!! to recover", num)
-                        #group.inodetable.inodes[num].print()
-                        #inode.print()
 
     def print(self):
         print("***********************")

@@ -1,7 +1,7 @@
 from .constants import JOURNALMAGICNUMBER
+from random import randint
 from sys import byteorder
 from .inode import inode
-from random import randint
 
 class journal():
 
@@ -9,6 +9,7 @@ class journal():
         self.desc = 0
         self.comm = 0
         self.supr = 0
+        self.recovered = 0
         self.jcontent = []
         self.block_size = block_size
         self.disk_file = disk_file
@@ -40,19 +41,19 @@ class journal():
                 self.comm +=1
             elif block_type == 4:
                 self.supr +=1
-                #ee_maxlen = int.from_bytes(block[0x10:0x14], byteorder=byteorder)
-                #print(ee_maxlen)
 
     def print(self):
         print("\t Journal")
         print("\t\t Descriptor records \t\t", self.desc)
         print("\t\t Commit records \t\t", self.comm)
         print("\t\t Superblock records \t\t", self.supr)
+        print("\t\t Recovered files \t\t", self.recovered)
             
     def descriptor(self, content):
-        #possible_inodes = []
         for ind in range(len(content) // self.inode_size):
             possible_inode = inode(content[ind*self.inode_size:(ind+1)*self.inode_size], ind)
             if possible_inode.valid():
-                with open("../FapsTesting/recovered/" + str(randint(100000,999999)) + ".bin", "wb") as recovered:
-                    recovered.write(possible_inode.getData(self.disk_file, self.block_size))
+                with open("../FapsTesting/recovered/" + possible_inode.name(), "wb") as recovered:
+                    data = possible_inode.getData(self.disk_file, self.block_size)
+                    recovered.write(data[0:possible_inode.size])
+                    self.recovered += 1

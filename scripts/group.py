@@ -19,7 +19,6 @@ class group():
             self.inodetable = inodetable(self.disk_file.read(self.superblock.block_size), self.superblock.inodes_per_group, self.superblock.inode_size, group_number)
             
             journal_inode = self.inodetable.inodes[self.superblock.journal_inode - 1]
-            journal_inode.print()
             journal_file = journal_inode.getData(self.disk_file, self.superblock.block_size)
             self.journal = journal(journal_file,  self.superblock.block_size, disk_file, self.superblock.inode_size)
 
@@ -27,6 +26,6 @@ class group():
         self.superblock.print()
 
         if self.superblock.valid:
-            #self.groupdescriptor.print()
-            #self.inodetable.print()
+            self.groupdescriptor.print()
+            self.inodetable.print()
             self.journal.print()

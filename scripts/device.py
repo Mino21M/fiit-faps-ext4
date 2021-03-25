@@ -59,3 +59,13 @@ class device():
             self.valid = False
             self.code = 102
             self.message = "Invalid number: not number"
+    
+    def getDirectory(self):
+        chosen = input("Store recovered items in folder: ")
+        if path.exists(chosen):
+            self.directory = chosen
+        else:
+            self.valid = False
+            self.code = 105
+            self.message = "Destination folder: Folder does not exist"
+            

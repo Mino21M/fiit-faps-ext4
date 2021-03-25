@@ -9,5 +9,3 @@ import psutil
 #300 +    : other catched errors - bugs
 
 recover()
-
-input("asd:")
