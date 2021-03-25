@@ -1,4 +1,4 @@
-from .constants import INODEPOINTER, DEFINODESIZE
+from .constants import INODEPOINTER
 from sys import byteorder
 
 class inode():
@@ -10,14 +10,14 @@ class inode():
 
     def parseInode(self, chunk):
         self.mode = int.from_bytes(chunk[0x0:0x2], byteorder=byteorder)
-        self.size = int.from_bytes(chunk[0x4:0x8] + chunk[0x80:0x82], byteorder=byteorder)
-        self.hard_links = int.from_bytes(chunk[0x1A:0x1B], byteorder=byteorder)
+        self.size = int.from_bytes(chunk[0x4:0x8], byteorder=byteorder)
         self.deleted_time = int.from_bytes(chunk[0x14:0x18], byteorder=byteorder)
-        self.block_count = int.from_bytes(chunk[0x1c:0x20] + chunk[0x98:0x9c], byteorder=byteorder)
+        self.hard_links = int.from_bytes(chunk[0x1A:0x1B], byteorder=byteorder)
+        self.block_count = int.from_bytes(chunk[0x1C:0x20], byteorder=byteorder)
         self.block_addressing = chunk[0x28:0x64]
 
     def print(self):
-        print("\t\t iNode \t\t\t\t", self.ind + 1)
+        print("\t\t iNode \t\t\t\t", self.ind)
         print("\t\t\t mode \t\t\t\t", self.mode)
         print("\t\t\t magic number \t\t\t", self.magic_number)
         print("\t\t\t hard links \t\t\t", self.hard_links)
@@ -37,7 +37,6 @@ class inode():
                     data_from += disk_file.read(block_size)
 
         disk_file.seek(old_position)
-
         return data_from
 
     def getBlocksExtentCount(self, byte, block):
@@ -45,7 +44,7 @@ class inode():
         ee_len = int.from_bytes(byte[4:6], byteorder=byteorder)
         ee_pos = int.from_bytes(byte[8:12] + byte[6:8], byteorder=byteorder)
         
-        return [*range(ee_pos, ee_pos+ee_len)]
+        return [*range(ee_pos, ee_len+ee_pos)]
 
     def parse_extent_idx(self, byte, block):
         ei_block = int.from_bytes(byte[0:4], byteorder=byteorder)
@@ -63,10 +62,9 @@ class inode():
             if depth == 0:
                 blcks = self.getBlocksExtentCount(chunk[position:position+12], block)
                 blocks.append(blcks)
-            """
             else:
-                print(self.parse_extent_idx(chunk[position:position+12], block))
-            """
+                pass
+                #print(self.parse_extent_idx(chunk[position:position+12], block))
 
         return blocks
 

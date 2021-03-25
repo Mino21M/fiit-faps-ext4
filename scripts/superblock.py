@@ -1,4 +1,4 @@
-from .constants import SUPERBLOCKMAGICNUMBER, SUPERBLOCKSIZE, errors
+from .constants import SUPERBLOCKMAGICNUMBER, SUPERBLOCKSIZE
 from sys import byteorder
 
 class superblock():
@@ -32,6 +32,7 @@ class superblock():
         self.blocks_per_group = self.blocksPerGroup()
         self.clusters_per_group = int.from_bytes(self.chunk[0x24:0x28], byteorder=byteorder)
         self.inodes_per_group = int.from_bytes(self.chunk[0x28:0x2B], byteorder=byteorder)
+        self.inode_size = int.from_bytes(self.chunk[0x58:0x5a], byteorder=byteorder)
         self.journal_inode = int.from_bytes(self.chunk[0xE0:0xE4], byteorder=byteorder)
 
     def blocksPerGroup(self):
@@ -56,6 +57,7 @@ class superblock():
             print("\t clusters per group \t\t", self.clusters_per_group)
             print("\t inodes per group \t\t", self.inodes_per_group)
             print("\t journal inode \t\t\t", self.journal_inode)
+            print("\t inode size \t\t\t", self.inode_size)
         else:
             print("\t Code \t\t\t\t", self.code)
             print("\t Message \t\t\t", self.message)

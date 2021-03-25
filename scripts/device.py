@@ -1,5 +1,4 @@
-from os import path, remove
-from .constants import errors
+from os import path
 import parted
 
 class device():
@@ -11,20 +10,6 @@ class device():
         self.getDevice()
         if self.valid:
             self.getPartition()
-
-    def create_image_from(self, device):
-        img = 'backup.img'
-        bytes_chunk = 1024
-        if path.exists(img):
-            remove(img)
-        with open(device, 'rb') as dev:
-            with open(img, 'wb') as fil:
-                buf = dev.read(bytes_chunk)
-                while buf:
-                    fil.write(buf)
-                    buf = dev.read(bytes_chunk)
-        return img
-
 
     def getDevice(self):
         devices = parted.getAllDevices()
@@ -65,7 +50,10 @@ class device():
         try:
             self.chosen_partition = int(self.chosen_partition) - 1
             if self.chosen_partition < 0 or self.chosen_partition > len(self.disk.partitions) - 1:
-                errors(2, "Invalid number: out of range")
+                self.valid = False
+                self.code = 104
+                self.message = "Invalid number: not in range"
+                return
             self.partition = self.disk.partitions[self.chosen_partition]
         except ValueError:
             self.valid = False

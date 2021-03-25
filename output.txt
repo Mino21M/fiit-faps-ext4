@@ -1,0 +1,182 @@
+Choose device or file (Default None) [Number]: [1] 		ext4 partition
+Choose partition (Default None) [Number]: ***********************
+Device 				 ../FapsTesting/test_large.img
+Partition 			 0
+Superblock 			 0
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 32768
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 98304
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 163840
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 229376
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 294912
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 819200
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 884736
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 1605632
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 2654208
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+Superblock 			 4096000
+	 magic number 			 61267
+	 desc size 			 64
+	 block size 			 4096
+	 total inode 			 65536
+	 total block count 		 262144
+	 free inode 			 52580
+	 blocks per group 		 32768
+	 clusters per group 		 32768
+	 inodes per group 		 8192
+	 journal inode 			 8
+	 inode size 			 256
+	 Journal
+		 Descriptor records 		 0
+		 Commit records 		 0
+		 Superblock records 		 0
+***********************
+asd:
