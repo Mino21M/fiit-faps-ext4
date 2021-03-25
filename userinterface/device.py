@@ -14,16 +14,17 @@ def getPartition(partitions):
 
     system("clear")
     print("Choose partition (Default None)")
+
     for part in partitions:
         filesystem = part.fileSystem
-        if filesystem and filesystem.type == "ext4":
-            #print more information here!!!
+        if filesystem:
             print("[" + str(row) + "] \t\t" + filesystem.type + " partition")
-            row += 1
+        row += 1
 
     return input("[Number]: ") 
 
 def getTarget():
     system("clear")
     print("Store recovered files in (Default None)")
+
     return input("[Folder]: ")

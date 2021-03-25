@@ -1,4 +1,6 @@
+from userinterface.progress import start, update
 from userinterface.output import outputer
+from scripts.constants import BOOTSECTORSIZE
 from scripts.device import device
 from scripts.group import group
 
@@ -10,6 +12,7 @@ class recover():
         self.device = device()
         self.partition_offset = self.device.partition.geometry.start*self.device.device.sectorSize
         self.groups = []
+        self.sections = self.create()
         
         if self.device.valid:
             self.parse()
@@ -17,14 +20,31 @@ class recover():
         outputer(self.print())
 
     def parse(self):
-        for group_number in GROUPPOSITIONS:
-            gr = group(group_number, self.device.disk_file, 1024, self.device.directory, self.partition_offset)
-            self.groups.append(gr)
+        for num, group_number in enumerate(GROUPPOSITIONS):
+           self.groups.append(self.group(num, group_number))
+
+    def group(self, num, group_number):
+        gr = group(group_number, self.device.disk_file, BOOTSECTORSIZE, self.device.directory, self.partition_offset)
+        update(self.sections, num)
+        
+        return gr
+
+
+    def create(self):
+        sections = []
+
+        for _ in GROUPPOSITIONS:
+            section = "GROUP"
+            sections.append(section)
+
+        start(sections)
+        return sections
+
 
     def print(self, verbosity=0):
         text = "DATA RECOVERY TOOL\n"
         text += "Device \t\t\t\t " + self.device.device.path + "\n"
-        text += "Partition \t\t\t " + self.device.partition.fileSystem.type + " (" + self.device.partition.name + ")\n"
+        text += "Partition \t\t\t " + self.device.partition.fileSystem.type + " (" + str(self.device.partition.number) + ", " + str(self.device.partition.getLength("MB")) + "MB)\n"
 
         if not self.device.valid:
             text += "\t Code \t\t\t\t" + str(self.device.code) + "\n"

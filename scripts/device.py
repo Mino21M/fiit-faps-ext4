@@ -48,7 +48,15 @@ class device():
                 self.code = 104
                 self.message = "Invalid number: not in range"
                 return
+
             self.partition = self.disk.partitions[self.chosen_partition]
+
+            filesystem = self.partition.fileSystem
+            if not filesystem or filesystem.type != "ext4":
+                self.valid = False
+                self.code = 106
+                self.message = "Invalid filesystem: only ext4 is supported"
+
         except ValueError:
             self.valid = False
             self.code = 102

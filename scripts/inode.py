@@ -97,10 +97,6 @@ class inode():
 
     def valid(self):
         if len(self.blocks) > 0:
-            if self.mode > 0 and self.mode < 65535:
-                return True
-            if self.magic_number > 0 and self.magic_number < 65535:
-                return True
             if self.size > 0 and self.size < 4294967295:
                 return True
             if self.block_count > 0 and self.block_count < 4294967295:
