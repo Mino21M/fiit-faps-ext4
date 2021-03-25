@@ -17,15 +17,21 @@ class inode():
         self.block_count = int.from_bytes(chunk[0x1C:0x20], byteorder=byteorder)
         self.block_addressing = chunk[0x28:0x64]
 
-    def print(self):
-        print("\t\t iNode \t\t\t\t", self.ind)
-        print("\t\t\t mode \t\t\t\t", self.mode)
-        print("\t\t\t magic number \t\t\t", self.magic_number)
-        print("\t\t\t hard links \t\t\t", self.hard_links)
-        print("\t\t\t size \t\t\t\t", self.size)
-        print("\t\t\t deleted time \t\t\t", self.deleted_time)
-        print("\t\t\t block count \t\t\t", self.block_count)
-        print("\t\t\t real block count \t\t", len(self.blocks))
+    def print(self, verbosity):
+        text = "\t\t iNode \t\t\t\t" + str(self.ind) + "\n"
+
+        if verbosity > 1:
+            text += "\t\t\t size \t\t\t\t" + str(self.size) + "\n"
+        if verbosity > 2:
+            text += "\t\t\t hard links \t\t\t" + str(self.hard_links) + "\n"
+            text += "\t\t\t deleted time \t\t\t" + str(self.deleted_time) + "\n"
+            text += "\t\t\t block count \t\t\t" + str(self.block_count) + "\n"
+        if verbosity > 3:
+            text += "\t\t\t magic number \t\t\t" + str(self.magic_number) + "\n"
+            text += "\t\t\t mode \t\t\t\t" + str(self.mode)
+            text += "\t\t\t real block count \t\t" + str(len(self.blocks)) + "\n"
+        
+        return text
 
     def getData(self, disk_file, block_size):
         data_from = b""
@@ -102,9 +108,11 @@ class inode():
         return False
 
     def name(self):
-        #size + "B/kB/MB..." + "_" + deletion_date(%Y%M%D_%H%M%S)
+        #now + "_" + size + "B/kB/MB..." + "_" + deletion_date(%Y%M%D_%H%M%S)
+        now = datetime.now()
+        now = now.strftime("%Y%d%m-%H%M%S")
         size = str(self.size)
         date = datetime.fromtimestamp(self.deleted_time)
         date = date.strftime("%Y%d%m-%H%M%S")
 
-        return size + "B_" + date + ".bin"
+        return now + "_" + size + "B_" + date + ".bin"

@@ -5,7 +5,7 @@ from .inode import inode
 
 class journal():
 
-    def __init__(self, journal_file, block_size, disk_file, inode_size):
+    def __init__(self, journal_file, block_size, disk_file, inode_size, recovery_folder):
         self.desc = 0
         self.comm = 0
         self.supr = 0
@@ -14,6 +14,7 @@ class journal():
         self.block_size = block_size
         self.disk_file = disk_file
         self.inode_size = inode_size
+        self.recovery_folder = recovery_folder if recovery_folder[-1] == "/" else recovery_folder + "/"
 
         self.get(journal_file)
         self.parse()
@@ -42,18 +43,25 @@ class journal():
             elif block_type == 4:
                 self.supr +=1
 
-    def print(self):
-        print("\t Journal")
-        print("\t\t Descriptor records \t\t", self.desc)
-        print("\t\t Commit records \t\t", self.comm)
-        print("\t\t Superblock records \t\t", self.supr)
-        print("\t\t Recovered files \t\t", self.recovered)
+    def print(self, verbosity):
+        text = "\t Journal\n"
+        text += "\t\t Recovered files \t\t" + str(self.recovered) + "\n"
+
+        if verbosity > 0:
+            text += "\t\t Descriptor records \t\t" + str(self.desc) + "\n"
+        if verbosity > 1:
+            text += "\t\t Recovered files \t\t" + str(self.recovered) + "\n"
+        if verbosity > 2:
+            text += "\t\t Commit records \t\t" + str(self.comm) + "\n"
+            text += "\t\t Superblock records \t\t" + str(self.supr) + "\n"
+
+        return text
             
     def descriptor(self, content):
         for ind in range(len(content) // self.inode_size):
             possible_inode = inode(content[ind*self.inode_size:(ind+1)*self.inode_size], ind)
             if possible_inode.valid():
-                with open("../FapsTesting/recovered/" + possible_inode.name(), "wb") as recovered:
+                with open(self.recovery_folder + possible_inode.name(), "wb") as recovered:
                     data = possible_inode.getData(self.disk_file, self.block_size)
                     recovered.write(data[0:possible_inode.size])
                     self.recovered += 1

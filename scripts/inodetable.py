@@ -14,7 +14,11 @@ class inodetable():
         for ind in range(self.inodes_per_group):
             self.inodes.append(inode(chunk[ind*self.inode_size:(ind+1)*self.inode_size], group_number*self.inodes_per_group + (ind+1)))
 
-    def print(self):
-        print("\t iNode table")
-        for ind in self.inodes:
-            ind.print()
+    def print(self, verbosity):
+        text = "\t iNode table " + str(len(self.inodes)) + "xiNodes\n"
+
+        if verbosity > 0:
+            for ind in self.inodes:
+                text += ind.print(verbosity)
+
+        return text

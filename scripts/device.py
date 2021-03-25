@@ -1,3 +1,4 @@
+from userinterface.device import getDevice, getPartition, getTarget
 from os import path
 import parted
 
@@ -10,12 +11,12 @@ class device():
         self.getDevice()
         if self.valid:
             self.getPartition()
+        if self.valid:
+            self.getDirectory()
 
     def getDevice(self):
         devices = parted.getAllDevices()
-        for row, dev in enumerate(devices, start=1):
-            print("[" + str(row) + "] \t\t" + dev.path)
-        self.chosen_device = input("Choose device or file (Default None) [Number]: ") 
+        self.chosen_device = getDevice(devices)
 
         try:
             self.chosen_device = int(self.chosen_device) - 1
@@ -38,15 +39,8 @@ class device():
         self.disk_file = open(self.device.path, "rb")
 
     def getPartition(self):
-        row = 1
-        for part in self.disk.partitions:
-            filesystem = part.fileSystem
-            if filesystem and filesystem.type == "ext4":
-                #print more information here!!!
-                print("[" + str(row) + "] \t\t" + filesystem.type + " partition")
-                row += 1
-            
-        self.chosen_partition = input("Choose partition (Default None) [Number]: ") 
+        self.chosen_partition = getPartition(self.disk.partitions)
+
         try:
             self.chosen_partition = int(self.chosen_partition) - 1
             if self.chosen_partition < 0 or self.chosen_partition > len(self.disk.partitions) - 1:
@@ -61,7 +55,8 @@ class device():
             self.message = "Invalid number: not number"
     
     def getDirectory(self):
-        chosen = input("Store recovered items in folder: ")
+        chosen = getTarget()
+
         if path.exists(chosen):
             self.directory = chosen
         else:

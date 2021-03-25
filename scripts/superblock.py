@@ -44,20 +44,26 @@ class superblock():
     def totalInode(self):
         return int.from_bytes(self.chunk[0x0:0x3], byteorder=byteorder)
 
-    def print(self):
-        print("Superblock \t\t\t", self.block_group)
+    def print(self, verbosity):
+        text = "Superblock \t\t\t " + str(self.block_group) + " (valid " + str(self.valid) + ")\n"
         if self.valid:
-            print("\t magic number \t\t\t", self.magic_number)
-            print("\t desc size \t\t\t", self.desc_size)
-            print("\t block size \t\t\t", self.block_size)
-            print("\t total inode \t\t\t", self.total_inode)
-            print("\t total block count \t\t", self.total_block_count)
-            print("\t free inode \t\t\t", self.free_inode)
-            print("\t blocks per group \t\t", self.blocks_per_group)
-            print("\t clusters per group \t\t", self.clusters_per_group)
-            print("\t inodes per group \t\t", self.inodes_per_group)
-            print("\t journal inode \t\t\t", self.journal_inode)
-            print("\t inode size \t\t\t", self.inode_size)
+            if verbosity > 0:
+                text += "\t magic number \t\t\t " + str(self.magic_number) + "\n"
+                text += "\t inode size \t\t\t" + str(self.inode_size) + "\n"
+            if verbosity > 1:
+                text += "\t desc size \t\t\t" + str(self.desc_size) + "\n"
+                text += "\t block size \t\t\t" + str(self.block_size) + "\n"
+                text += "\t total inode \t\t\t" + str(self.total_inode) + "\n"
+            if verbosity > 2:
+                text += "\t total block count \t\t" + str(self.total_block_count) + "\n"
+                text += "\t free inode \t\t\t" + str(self.free_inode) + "\n"
+                text += "\t blocks per group \t\t" + str(self.blocks_per_group) + "\n"
+            if verbosity > 3:
+                text += "\t clusters per group \t\t" + str(self.clusters_per_group) + "\n"
+                text += "\t inodes per group \t\t" + str(self.inodes_per_group) + "\n"
+                text += "\t journal inode \t\t\t" + str(self.journal_inode) + "\n"
         else:
-            print("\t Code \t\t\t\t", self.code)
-            print("\t Message \t\t\t", self.message)
+            text += "\t Code \t\t\t\t " + str(self.code) + "\n"
+            text += "\t Message \t\t\t " + str(self.message) + "\n"
+
+        return text
