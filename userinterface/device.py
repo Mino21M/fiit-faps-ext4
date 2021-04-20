@@ -1,7 +1,6 @@
 from os import system
 
 def getDevice(devices):
-    system("clear")
     print("Choose device or file (Default None)")
 
     for row, dev in enumerate(devices, start=1):
@@ -12,7 +11,6 @@ def getDevice(devices):
 def getPartition(partitions):
     row = 1
 
-    system("clear")
     print("Choose partition (Default None)")
 
     for part in partitions:
@@ -24,7 +22,6 @@ def getPartition(partitions):
     return input("[Number]: ") 
 
 def getTarget():
-    system("clear")
     print("Store recovered files in (Default None)")
 
     return input("[Folder]: ")

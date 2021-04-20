@@ -27,7 +27,7 @@ class journal():
             if magic_number == JOURNALMAGICNUMBER:
                 self.jcontent.append(content)
         
-    def parse(self):
+    def parse(self):    
         for block in self.jcontent:
             block_type = int.from_bytes(block[0x07:0x08], byteorder=byteorder)
             if block_type == 1:

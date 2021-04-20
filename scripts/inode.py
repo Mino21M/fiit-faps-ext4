@@ -53,7 +53,7 @@ class inode():
         
         return [*range(ee_pos, ee_len+ee_pos)]
 
-    def parse_extent_idx(self, byte, block):
+    def parseExtentIdx(self, byte, block):
         ei_block = int.from_bytes(byte[0:4], byteorder=byteorder)
         ei_leaf = int.from_bytes(byte[4:0xa], byteorder=byteorder)
         return ei_block, ei_leaf

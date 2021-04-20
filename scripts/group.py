@@ -7,6 +7,7 @@ from scripts.constants import SUPERBLOCKSIZE
 class group():
 
     def __init__(self, group_number, disk_file, padding, recovery_folder, partition_offset):
+        self.group_number = group_number
         self.disk_file = disk_file
         self.disk_file.seek(padding + partition_offset)
         self.superblock = superblock(self.disk_file.read(SUPERBLOCKSIZE), group_number)
@@ -20,7 +21,8 @@ class group():
             
             journal_inode = self.inodetable.inodes[self.superblock.journal_inode - 1]
             journal_file = journal_inode.getData(self.disk_file, self.superblock.block_size)
-            self.journal = journal(journal_file,  self.superblock.block_size, disk_file, self.superblock.inode_size, recovery_folder)
+            if group_number == 0:
+                self.journal = journal(journal_file,  self.superblock.block_size, disk_file, self.superblock.inode_size, recovery_folder)
 
     def print(self, verbosity):
         text = self.superblock.print(verbosity)
@@ -28,6 +30,7 @@ class group():
         if self.superblock.valid:
             text += self.groupdescriptor.print(verbosity)
             text += self.inodetable.print(verbosity)
-            text += self.journal.print(verbosity)
+            if self.group_number == 0:
+                text += self.journal.print(verbosity)
 
         return text
